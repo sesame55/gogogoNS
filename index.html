@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>故宮南院一日遊</title>
+<script>
+  // 先套用上次選的主題，避免閃爍
+  try { const t = localStorage.getItem('npm-south-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Lora:ital,wght@0,500;0,600;1,500&family=Noto+Serif+TC:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#home">
+      <span class="brand-mark" aria-hidden="true">南</span>
+      <span class="brand-name"><b>故宮南院行程</b><small>A Day Trip in Chiayi</small></span>
+    </a>
+    <button class="theme-btn" id="theme-btn" type="button"></button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ========== 總覽 ========== -->
+  <section class="page" id="home" aria-labelledby="h-home">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <filter id="ik-bleed" x="-5%" y="-20%" width="110%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency=".008 .03" numOctaves="4" seed="3" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="70" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </svg>
+    <div class="ik-hero">
+      <div class="ik-par">
+        <img class="ik-photo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Southern_Branch_of_the_National_Palace_Museum_main_building_and_zhimei_bridge.jpg/1280px-Southern_Branch_of_the_National_Palace_Museum_main_building_and_zhimei_bridge.jpg" width="1280" height="960" alt="至善湖畔的至美橋與南院本館" fetchpriority="high">
+        <div class="ik-tint"></div>
+        <div class="ik-haze"></div>
+      </div>
+      <div class="ik-cloud c1"></div><div class="ik-cloud c2"></div>
+      <svg class="ik-lines" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true"><g>
+        <path pathLength="1" d="M-40 600C260 470 560 690 860 560S1260 400 1480 500"/>
+        <path pathLength="1" class="j" d="M-40 640C280 520 590 730 890 610S1290 450 1480 560"/>
+        <path pathLength="1" d="M-40 690C300 590 620 770 920 660S1320 520 1480 630"/>
+        <path pathLength="1" d="M-40 740C330 660 650 810 950 720S1340 600 1480 700"/>
+      </g></svg>
+      <div class="ik-wash"></div>
+      <div class="ik-mast">
+        <h1 class="ik-title" id="h-home"><span>故</span><span>宮</span><span>南</span><span>院</span></h1>
+        <div class="ik-side">
+          <span class="ik-seal">南院</span>
+          <p class="ik-en">National Palace Museum · Southern Branch</p>
+        </div>
+      </div>
+      <div class="ik-copy">
+        <p class="ik-kicker">Chiayi · Taibao</p>
+        <p class="ik-lead">湖光、水墨與亞洲藝術，<br>一日慢遊剛剛好。</p>
+        <p class="ik-sub">嘉義太保的亞洲藝術博物館，高鐵嘉義站有免費接駁車。</p>
+        <div class="ik-actions">
+          <a class="ik-btn" href="#plan">看推薦行程</a>
+          <a class="ik-link" href="#go">怎麼去南院</a>
+        </div>
+      </div>
+      <div class="ik-cue" aria-hidden="true"></div>
+    </div>
+
+    <div class="ik-sec">
+      <div class="ik-grid">
+        <div class="rv">
+          <p class="ik-label">Architecture</p>
+          <h2 class="ik-h2">以水墨筆法<br>寫成的建築</h2>
+          <p class="ik-p">南院建築以濃墨、飛白、渲染三種水墨筆法為設計概念；墨韻樓外牆由三萬多枚鑄鋁圓盤組成，近看有雲龍紋路，晴天最好拍。</p>
+          <div class="ik-strokes">
+            <div><b>濃墨</b><span>墨色飽滿厚重</span></div>
+            <div><b>飛白</b><span>乾筆擦過，露出紙白</span></div>
+            <div><b>渲染</b><span>水墨暈開，層層漸變</span></div>
+          </div>
+        </div>
+        <figure class="ik-fig rv">
+          <img class="ik-brush" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/NPM_south_branch_Main_building_20250812.jpg/1280px-NPM_south_branch_Main_building_20250812.jpg" width="1280" height="980" alt="南院本館正面與墨韻樓圓盤外牆" loading="lazy">
+          <figcaption>本館與墨韻樓　攝影：Yu tptw（CC BY-SA 4.0）</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="ik-band rv">
+      <img class="ik-brush" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/20250718_102924_NPMSB_Jhihde_Lake_and_Lanyue_Bridge.jpg/960px-20250718_102924_NPMSB_Jhihde_Lake_and_Lanyue_Bridge.jpg" width="960" height="720" alt="至德湖與覽月橋" loading="lazy">
+      <p>至德湖・覽月橋</p>
+    </div>
+
+    <div class="ik-sec">
+      <div class="ik-grid" style="align-items:start">
+        <div class="rv">
+          <p class="ik-label">Before You Go</p>
+          <h2 class="ik-h2">出發前，<br>先看這裡</h2>
+          <p class="ik-p">館內至少留 3–4 小時。早上開館人最少，戶外拍照留到下午三點以後的斜陽。</p>
+          <div class="notice"><b>11/15 截止：</b>「乾清宮尋寶」與「妙色—清代金銀飾件」兩檔特展即將結束，S201 展廳的下一檔展覽官網尚未公告。<br><b>11/11 開展：</b>「知漁之樂──漁樂圖特展」（S203 2F）。<br><b>週一休館：</b>戶外園區照常開放。</div>
+          <p class="asof">資料確認日期：2026 年 11 月 7 日</p>
+        </div>
+        <div class="rv">
+          <dl class="info">
+      <div><dt>展廳・週二至週五</dt><dd>09:00–17:00</dd></div>
+      <div><dt>展廳・週末與國定假日</dt><dd>09:00–18:00</dd></div>
+      <div><dt>戶外園區</dt><dd>05:00–22:00<small>免費・全年開放</small></dd></div>
+      <div><dt>全票</dt><dd>NT$150<small>未滿 18 歲、學生免費</small></dd></div>
+    </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="ik-sec" style="padding-top:0">
+      <div class="rv">
+        <p class="ik-label">Explore</p>
+        <h2 class="ik-h2">開始規劃</h2>
+      </div>
+      <ul class="ik-nav rv">
+        <li><a href="#plan"><span class="n">壹</span><span class="t">推薦行程</span><span class="s">一日遊・二日遊</span><span class="ar"></span></a></li>
+        <li><a href="#see"><span class="n">貳</span><span class="t">看展與拍照</span><span class="s">當期展覽・拍照點</span><span class="ar"></span></a></li>
+        <li><a href="#go"><span class="n">參</span><span class="t">交通方式</span><span class="s">開車・高鐵・接駁</span><span class="ar"></span></a></li>
+        <li><a href="#food"><span class="n">肆</span><span class="t">周邊美食</span><span class="s">館內・太保・朴子</span><span class="ar"></span></a></li>
+        <li><a href="#prep"><span class="n">伍</span><span class="t">出發前確認</span><span class="s">清單・實用撇步</span><span class="ar"></span></a></li>
+      </ul>
+    </div>
+
+    <div class="ik-sec" style="padding-top:0">
+      <dl class="ik-stats rv">
+        <div><dt>全票（NT$）</dt><dd data-to="150">0</dd></div>
+        <div><dt>園區面積（公頃）</dt><dd data-to="70">0</dd></div>
+        <div><dt>覽月橋長（公尺）</dt><dd data-to="80">0</dd></div>
+        <div><dt>戶外園區開到</dt><dd data-to="22">0<small style="font-size:.5em">:00</small></dd></div>
+      </dl>
+      <p class="credit" style="margin-top:3rem;font-size:.75rem;color:var(--hm-sumi2)">照片：B2322858（公有領域）、Yu tptw（CC BY-SA 4.0）、Saimmx（CC0），Wikimedia Commons</p>
+      <details class="sources">
+        <summary>資料來源</summary>
+        <h4>官方與旅遊平台</h4>
+        <ol>
+          <li><a href="https://south.npm.gov.tw/" target="_blank" rel="noopener">國立故宮博物院南部院區官網</a></li>
+          <li><a href="https://south.npm.gov.tw/Visit/Ticket.htm" target="_blank" rel="noopener">官網・票價</a></li>
+          <li><a href="https://south.npm.gov.tw/Visit/Traffic/MassTransit.htm" target="_blank" rel="noopener">官網・大眾運輸（含高鐵接駁、BRT 7212 時刻表）</a></li>
+          <li><a href="https://south.npm.gov.tw/Visit/OpenHours.htm" target="_blank" rel="noopener">官網・開放時間</a></li>
+          <li><a href="https://south.npm.gov.tw/ExhibitionsListC003110.aspx?appname=Exhibition3112" target="_blank" rel="noopener">官網・當期展覽與各展覽介紹</a></li>
+          <li><a href="https://south.npm.gov.tw/Visit/ParkIntroduction/PublicArt.htm" target="_blank" rel="noopener">官網・公共藝術</a></li>
+          <li><a href="https://south.npm.gov.tw/Visit/ParkIntroduction/lumienmt.htm" target="_blank" rel="noopener">官網・光環境</a></li>
+          <li><a href="https://south.npm.gov.tw/Visit/ParkIntroduction/Plan.htm" target="_blank" rel="noopener">官網・園區平面圖</a></li>
+          <li><a href="https://www.taisugar.com.tw/chinese/FAQ_list.aspx?n=10094&t1=%E6%97%85%E9%81%8A%E8%B3%87%E8%A8%8A&t2=%E8%92%9C%E9%A0%AD%E8%94%97%E5%9F%95%E6%96%87%E5%8C%96%E5%9C%92%E5%8D%80" target="_blank" rel="noopener">台糖・蒜頭蔗埕文化園區常見問答</a></li>
+          <li><a href="https://www.swcoast-nsa.gov.tw/zh-tw/attraction/details/493" target="_blank" rel="noopener">雲嘉南濱海國家風景區・高跟鞋教堂</a></li>
+          <li><a href="https://www.swcoast-nsa.gov.tw/zh-tw/attraction/details/35" target="_blank" rel="noopener">雲嘉南濱海國家風景區・東石漁人碼頭</a></li>
+          <li><a href="https://recreation.forest.gov.tw/Forest/FP?typ_id=05001" target="_blank" rel="noopener">林業及自然保育署・鰲鼓濕地森林園區</a></li>
+          <li><a href="https://www.tbocc.gov.tw/SightLib/Sight_Detail.aspx?id=1911dee8-16d5-e411-85dc-e4115b13f301&lang=tw" target="_blank" rel="noopener">嘉義縣文化觀光局・配天宮</a></li>
+          <li><a href="https://nchdb.boch.gov.tw/assets/overview/monument/20030313000001" target="_blank" rel="noopener">國家文化資產網・朴子配天宮</a></li>
+          <li><a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap（園區景點位置、車程估算）</a></li>
+          <li><a href="https://www.taiwan.net.tw/m1.aspx?sNo=0001116&id=A12-00234" target="_blank" rel="noopener">交通部觀光署</a></li>
+          <li><a href="https://tw.trip.com/blog/chiayi-palace-museum/" target="_blank" rel="noopener">Trip.com 旅遊指南</a></li>
+          <li><a href="https://www.kkday.com/zh-tw/blog/129132/asia-taiwan-chiayi-taiwan-national-palace-museum" target="_blank" rel="noopener">KKday 部落格</a></li>
+          <li><a href="https://blog.easytravel.com.tw/what-are-the-highlights-of-visiting-the-south-campus-of/" target="_blank" rel="noopener">四方通行旅遊網</a></li>
+          <li><a href="https://gofunit.com/%E6%95%85%E5%AE%AE%E5%8D%97%E9%99%A2/" target="_blank" rel="noopener">好好玩 FUNIT</a></li>
+          <li><a href="https://supertaste.tvbs.com.tw/travel/358731" target="_blank" rel="noopener">食尚玩家</a></li>
+          <li><a href="https://travel.udn.com/travel/story/7934/9208977" target="_blank" rel="noopener">udn 旅遊</a></li>
+          <li><a href="https://travel.ettoday.net/article/1827973.htm" target="_blank" rel="noopener">ETtoday 旅遊雲</a></li>
+          <li><a href="https://smiletaiwan.cw.com.tw/article/9325" target="_blank" rel="noopener">微笑台灣</a></li>
+          <li><a href="https://www.linego.me/news/6400" target="_blank" rel="noopener">LINE GO 交通攻略</a></li>
+          <li><a href="https://www.tripool.app/articles/southern-branch-of-national-palace-museum-transportation" target="_blank" rel="noopener">Tripool 交通整理</a></li>
+        </ol>
+        <h4>部落客</h4>
+        <ol>
+          <li><a href="https://andyventure.com/taiwan-southern-branch-national-palace-museum/" target="_blank" rel="noopener">冒險安迪</a></li>
+          <li><a href="https://lyes.tw/33248473-%E6%95%85%E5%AE%AE%E5%8D%97%E9%99%A2/" target="_blank" rel="noopener">涼子是也</a></li>
+          <li><a href="https://almablog.tw/blog/post/npmsouth" target="_blank" rel="noopener">艾瑪 吃喝玩樂札記</a></li>
+          <li><a href="https://1817box.tw/south-npm/" target="_blank" rel="noopener">1817BOX</a></li>
+          <li><a href="https://jamesdiscover.tw/blog/17745" target="_blank" rel="noopener">若曦的味旅人生</a></li>
+          <li><a href="https://www.adamstartliving.com/post/south-npm-one-day-trip" target="_blank" rel="noopener">Adam Start Living</a></li>
+          <li><a href="https://mimigo.tw/south-npm/" target="_blank" rel="noopener">Mimigo</a></li>
+          <li><a href="https://travelss.net/2026/06/04/%e5%98%89%e7%be%a9%e6%95%85%e5%ae%ae%e5%8d%97%e9%99%a2%e5%ae%8c%e6%95%b4%e6%94%bb%e7%95%a5%ef%bc%81%e4%ba%9e%e6%b4%b2%e8%97%9d%e8%a1%93%e5%8d%9a%e7%89%a9%e9%a4%a8%e9%80%9b%e5%b1%95%e3%80%81%e6%b9%96/" target="_blank" rel="noopener">旅遊極短篇</a></li>
+          <li><a href="https://damon624.pixnet.net/blog/posts/48399456" target="_blank" rel="noopener">太保美食懶人包（痞客邦）</a></li>
+          <li><a href="https://sunny230.pixnet.net/blog/post/449550170" target="_blank" rel="noopener">酒窩小姊 sunny</a></li>
+          <li><a href="https://pfse64289.pixnet.net/blog/post/331348791" target="_blank" rel="noopener">安妮王的旅行記</a></li>
+          <li><a href="https://blog.udn.com/amyhsiuying/157889728" target="_blank" rel="noopener">開心 papago</a></li>
+          <li><a href="https://fullfenblog.tw/taibao/" target="_blank" rel="noopener">fullfenblog・太保景點</a></li>
+          <li><a href="https://woment.com.tw/43001/palace-museum-southern-branch-architecture/" target="_blank" rel="noopener">WOMENT 建築視角</a></li>
+        </ol>
+        <h4>YouTube</h4>
+        <ol>
+          <li><a href="https://www.youtube.com/watch?v=rdzlKHjKSTM" target="_blank" rel="noopener">嘉義一日遊～故宮南院，可以逛上一整天</a></li>
+          <li><a href="https://www.youtube.com/watch?v=Gq_66pttkBs" target="_blank" rel="noopener">夜遊故宮南院＋晨遊蒜頭糖廠</a></li>
+          <li><a href="https://www.youtube.com/watch?v=06ww8TJLGtI" target="_blank" rel="noopener">蒜頭糖廠五分車進站故宮南院</a></li>
+          <li><a href="https://www.youtube.com/watch?v=tkXrrrF7KMo" target="_blank" rel="noopener">自由行：無障礙接駁車怎麼搭</a></li>
+          <li><a href="https://www.youtube.com/watch?v=keJoQrG_7e0" target="_blank" rel="noopener">水舞秀與 3D 水幕魔鏡秀</a></li>
+          <li><a href="https://youtube.com/watch?v=yt_gRTsKmlc" target="_blank" rel="noopener">故宮南院初體驗・至善湖與景觀園區</a></li>
+          <li><a href="https://www.youtube.com/watch?v=-auQD1PR-E8" target="_blank" rel="noopener">空拍：濃墨、飛白、渲染、至美橋</a></li>
+          <li><a href="https://www.youtube.com/watch?v=kY-3w5W8F-8" target="_blank" rel="noopener">無人機表演・南院一日遊 4K</a></li>
+          <li><a href="https://www.youtube.com/watch?v=zDuoxt7Mzs0" target="_blank" rel="noopener">故宮南院 VR：建築之美（官方）</a></li>
+          <li><a href="https://www.youtube.com/watch?v=fsbDrkEdcdA" target="_blank" rel="noopener">故宮南院 VR：戶外美術館（官方）</a></li>
+        </ol>
+      </details>
+      <p class="foot">個人整理・非官方網站。開放時間、票價與展覽可能調整，以故宮南院官網公告為準。</p>
+    </div>
+  </section>
+
+  <!-- ========== 行程 ========== -->
+  <section class="page" id="plan" aria-labelledby="h-plan" hidden>
+    <div class="wrap">
+      <div class="page-head">
+        <h2 id="h-plan">推薦行程</h2><div class="en">Itinerary</div>
+        <p>館內至少留 3–4 小時。早上開館人最少，戶外拍照留到下午三點以後的斜陽。</p>
+      </div>
+      <div class="seg" role="tablist">
+        <button role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true">一日遊</button>
+        <button role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1">二日遊</button>
+      </div>
+
+      <div class="panel" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+        <ol class="timeline">
+          <li><time>早上</time><div><h3>出發</h3><p>依出發地抓好時間，09:00 開館時抵達。開車可停南側 P1、P2；搭大眾運輸的話，可接 08:30 從高鐵嘉義站發車的 BRT 7212，或 08:45 的免費接駁車。</p></div></li>
+          <li class="key"><time>09:00</time><div><h3><span class="tag">展覽</span>3F 往下逛</h3><p>3F 天團降臨、佛陀形影 → 2F 東亞茶文化、書法新媒體、漁樂圖 → 1F 穿越喜瑪拉雅特展。可在售票處租語音導覽。</p></div></li>
+          <li><time>12:00</time><div><h3>午餐</h3><p>館內 1F 野爺鍋物（假日建議訂位），或開車 5–10 分鐘到太保市區吃築日食堂、丁家魯肉飯、食光雞火雞肉飯。</p></div></li>
+          <li><time>13:30</time><div><h3><span class="tag">展覽</span>補看展廳＋禮品店</h3><p>回展廳補看上午沒看完的，或看嘉義文史展，再逛禮品店。</p></div></li>
+          <li class="key"><time>14:45</time><div><h3><span class="tag">園區</span>環湖散步</h3><p>至善湖、至德湖步道，覽月橋、草間彌生《南瓜精靈》。</p></div></li>
+          <li class="key"><time>16:00</time><div><h3><span class="tag">拍照</span>至美橋拍墨韻樓</h3><p>從至美橋回望館體是最經典的角度，傍晚斜陽最好拍。</p></div></li>
+          <li><time>17:15</time><div><h3>日落與晚餐</h3><p>11–12 月約 17:15 日落，拍完夕陽開車 11 分鐘到朴子，吃真好味鴨肉羹（18:30 打烊）、麻糬棟，週六還有朴子夜市。</p></div></li>
+          <li><time>18:30</time><div><h3>回程</h3><p>開車從朴子接台 82 上國道。這時已沒有回高鐵站的大眾運輸（末班見交通頁），沒開車的話要叫計程車。</p></div></li>
+        </ol>
+        <p class="plan-note">想順遊蒜頭糖廠（園區 08:00–17:00，開車約 6 分鐘）的話，把 14:45 的環湖散步換成糖廠，16:00 再回南院拍至美橋。</p>
+      </div>
+
+
+      <div class="panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+        <p class="day-title"><span>Day 1</span>南院慢慢看＋夜遊</p>
+        <ol class="timeline">
+          <li><time>早上</time><div><h3>出發</h3><p>開車，或搭高鐵到嘉義站再轉 BRT 7212、免費接駁車。</p></div></li>
+          <li class="key"><time>09:00</time><div><h3><span class="tag">展覽</span>南院展館</h3><p>不用趕，三層樓完整看完，再加看嘉義文史展。</p></div></li>
+          <li><time>12:00</time><div><h3>午餐</h3><p>館內野爺鍋物，或太保市區小吃。</p></div></li>
+          <li><time>13:30</time><div><h3><span class="tag">展覽</span>補看展廳＋禮品店</h3><p>上午沒看完的展廳在這時補齊。</p></div></li>
+          <li><time>15:00</time><div><h3>蒜頭糖廠</h3><p>假日可搭五分車過去，逛蔗埕文化園區、吃枝仔冰。</p></div></li>
+          <li class="key"><time>17:00</time><div><h3><span class="tag">拍照</span>回南院看夕陽與夜景</h3><p>園區開到 22:00，臨水廣場一帶夜間有燈光；夏季有水舞秀（2026 場次請查官網公告）。</p></div></li>
+          <li><time>19:00</time><div><h3>入住</h3><p>南院旁有長榮文苑等飯店；想逛夜市就住嘉義市區，去文化路夜市。</p></div></li>
+        </ol>
+
+        <p class="day-title"><span>Day 2</span>嘉義市區慢遊</p>
+        <ol class="timeline">
+          <li><time>08:30</time><div><h3>早餐</h3><p>雞肉飯或在地早餐店。</p></div></li>
+          <li><time>09:30</time><div><h3>檜意森活村</h3><p>日式木造宿舍群，散步拍照。BRT 7212 在文化中心站下車，年底前免費。</p></div></li>
+          <li><time>11:00</time><div><h3>阿里山林業村／北門驛</h3><p>就在旁邊，看老火車與車庫。</p></div></li>
+          <li><time>12:30</time><div><h3>午餐</h3><p>市區小吃，砂鍋魚頭也很有名。</p></div></li>
+          <li><time>14:00</time><div><h3>嘉義公園＋射日塔</h3><p>登塔看嘉義市景。</p></div></li>
+          <li><time>16:30</time><div><h3>回程</h3><p>提早出發避開晚間車潮。</p></div></li>
+        </ol>
+      </div>
+
+      <h3 class="sub">下雨與季節</h3>
+      <ul class="list">
+        <li><b>下雨天</b><span>展廳全在室內，雨天就把時間留給 3 層展廳，照「看展」頁的動線慢慢看，午餐在館內 1F 解決。停車場到本館要走一段戶外步道，園區內有接駁車往返停車場與一館接駁站，班次以官網「園區內接駁服務」為準。</span></li>
+        <li><b>5–9 月</b><span>午後雷陣雨多，戶外拍照排在上午或傍晚，中午進展廳避雨避曬。颱風天請先看官網有沒有休館公告。</span></li>
+        <li><b>10–4 月</b><span>雨少、氣溫舒服，最適合環湖散步。冬天早晚涼、平原風大，帶件外套。</span></li>
+        <li><b>日落時間</b><span>11–1 月約 17:15–17:30、3 月約 18:05、6 月約 18:45、10 月約 17:30（依南院經緯度計算）。至美橋夕陽與夜景都以這個時間往回推。</span></li>
+      </ul>
+
+      <h3 class="sub">順遊景點</h3>
+      <p class="sub-note">車程為從南院出發的估算，實際依路況而定。</p>
+      <ul class="sights">
+        <li><img class="sight-img" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Suantou_Sugar_Factory_DSCN7710.jpg/960px-Suantou_Sugar_Factory_DSCN7710.jpg" width="960" height="720" alt="蒜頭糖廠月台與五分車" loading="lazy" decoding="async"><div class="sight-body"><div class="sight-head"><b>蒜頭糖廠蔗埕文化園區</b><span class="drive">約 6 分・1.8 km</span></div>
+          <p>就在南院北側，免費入園，08:00–17:00。可看百年糖蜜槽、搭五分車；五分車班次與票價以台糖公告為準。</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=%E8%92%9C%E9%A0%AD%E7%B3%96%E5%BB%A0%E8%94%97%E5%9F%95%E6%96%87%E5%8C%96%E5%9C%92%E5%8D%80" target="_blank" rel="noopener">導航</a><small class="sight-credit">攝影：<a href="https://commons.wikimedia.org/wiki/File:Suantou_Sugar_Factory_DSCN7710.jpg" target="_blank" rel="noopener">Teng Feng-Chou</a>・CC BY-SA 3.0</small></div></li>
+        <li><img class="sight-img" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/%E5%98%89%E7%BE%A9%E6%9C%B4%E5%AD%90%E9%85%8D%E5%A4%A9%E5%AE%AE.jpg/960px-%E5%98%89%E7%BE%A9%E6%9C%B4%E5%AD%90%E9%85%8D%E5%A4%A9%E5%AE%AE.jpg" width="960" height="641" alt="朴子配天宮廟埕" loading="lazy" decoding="async"><div class="sight-body"><div class="sight-head"><b>朴子配天宮</b><span class="drive">約 11 分・6.4 km</span></div>
+          <p>主祀媽祖，清康熙年間創建，列為古蹟；元宵節的「御賜燈花」是當地最有特色的慶典。可以和朴子的鴨肉羹、麻糬棟排在一起。</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%B4%E5%AD%90%E9%85%8D%E5%A4%A9%E5%AE%AE" target="_blank" rel="noopener">導航</a><small class="sight-credit">攝影：<a href="https://commons.wikimedia.org/wiki/File:%E5%98%89%E7%BE%A9%E6%9C%B4%E5%AD%90%E9%85%8D%E5%A4%A9%E5%AE%AE.jpg" target="_blank" rel="noopener">WU PEI HSUAN</a>・CC BY-SA 4.0</small></div></li>
+        <li><img class="sight-img" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/%E9%B0%B2%E9%BC%93%E6%BF%95%E5%9C%B0_Aogu_wetland_-_panoramio.jpg/960px-%E9%B0%B2%E9%BC%93%E6%BF%95%E5%9C%B0_Aogu_wetland_-_panoramio.jpg" width="960" height="640" alt="鰲鼓濕地水景" loading="lazy" decoding="async"><div class="sight-body"><div class="sight-head"><b>鰲鼓濕地森林園區</b><span class="drive">約 23 分・18 km</span></div>
+          <p>由台糖農場積水形成的大片濕地，11 月到隔年 3 月是賞鳥季。林業署資料寫 09:00–16:30、週一休，出發前請再確認。</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%B0%B2%E9%BC%93%E6%BF%95%E5%9C%B0%E6%A3%AE%E6%9E%97%E5%9C%92%E5%8D%80" target="_blank" rel="noopener">導航</a><small class="sight-credit">攝影：<a href="https://commons.wikimedia.org/wiki/File:%E9%B0%B2%E9%BC%93%E6%BF%95%E5%9C%B0_Aogu_wetland_-_panoramio.jpg" target="_blank" rel="noopener">lienyuan lee</a>・CC BY 3.0</small></div></li>
+        <li><img class="sight-img" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Dongshi_Fisherman%27s_Wharf%2C_Chiayi_County_%28Taiwan%29.jpg/960px-Dongshi_Fisherman%27s_Wharf%2C_Chiayi_County_%28Taiwan%29.jpg" width="960" height="540" alt="東石漁人碼頭廣場" loading="lazy" decoding="async"><div class="sight-body"><div class="sight-head"><b>東石漁人碼頭</b><span class="drive">約 25 分・17.6 km</span></div>
+          <p>由漁港轉型的觀光碼頭，有彩色小屋、海邊木棧道，適合看夕陽、吃海鮮。</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E7%9F%B3%E6%BC%81%E4%BA%BA%E7%A2%BC%E9%A0%AD" target="_blank" rel="noopener">導航</a><small class="sight-credit">攝影：<a href="https://commons.wikimedia.org/wiki/File:Dongshi_Fisherman%27s_Wharf,_Chiayi_County_(Taiwan).jpg" target="_blank" rel="noopener">Mk2010</a>・CC BY-SA 4.0</small></div></li>
+        <li><img class="sight-img" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/%E9%AB%98%E8%B7%9F%E9%9E%8B%E6%95%99%E5%A0%82.jpg/960px-%E9%AB%98%E8%B7%9F%E9%9E%8B%E6%95%99%E5%A0%82.jpg" width="960" height="815" alt="布袋高跟鞋教堂" loading="lazy" decoding="async"><div class="sight-body"><div class="sight-head"><b>布袋高跟鞋教堂</b><span class="drive">約 32 分・23.4 km</span></div>
+          <p>高約 17 公尺、由 320 多片玻璃組成的高跟鞋造型建築。戶外 24 小時開放，夜間 18:00–21:00 點燈，可以排在傍晚。</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%B8%83%E8%A2%8B%E9%AB%98%E8%B7%9F%E9%9E%8B%E6%95%99%E5%A0%82" target="_blank" rel="noopener">導航</a><small class="sight-credit">攝影：<a href="https://commons.wikimedia.org/wiki/File:%E9%AB%98%E8%B7%9F%E9%9E%8B%E6%95%99%E5%A0%82.jpg" target="_blank" rel="noopener">Accord14</a>・CC BY-SA 4.0</small></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== 看展 ========== -->
+  <section class="page" id="see" aria-labelledby="h-see" hidden>
+    <div class="wrap">
+      <div class="page-head">
+        <h2 id="h-see">看展與拍照</h2><div class="en">Exhibitions & Photo Spots</div>
+        <p>展廳從 3 樓往下逛最順。展覽會輪替，出發前請再上官網核對。</p>
+      </div>
+      <div class="notice"><b>即將結束：</b>「乾清宮尋寶」與「妙色—清代金銀飾件」（S201 2F）展到 11/15，下一檔展覽官網尚未公告。<br><b>換檔：</b>天團降臨 12/6 展完第 III 期，12/8 起換第 IV 期展件。</div>
+      <p class="asof">展覽資訊確認日期：2026 年 11 月 7 日</p>
+
+      <h3 class="sub">建議動線</h3>
+      <ol class="route">
+        <li><b>3F</b><span>S301 導覽大廳 → S302 天團降臨 → S303 佛陀形影</span><small>約 1 小時 15 分</small></li>
+        <li><b>2F</b><span>S202 東亞茶文化 → S203 漁樂圖 → S204 書法新媒體</span><small>約 1 小時 15 分</small></li>
+        <li><b>1F</b><span>S101 穿越喜瑪拉雅 → 嘉義文史展</span><small>約 1 小時 15 分</small></li>
+      </ol>
+      <p class="sub-note">停留時間是依展廳規模估算，全部看完約 3.5–4 小時；時間不夠就先看 1F 特展和 3F。</p>
+
+      <h3 class="sub">當期展覽</h3>
+      <div class="cards">
+        <a class="card has-img" href="https://south.npm.gov.tw/ExhibitionsDetailC003110.aspx?Cond=39beb118-6ab1-41b4-aa69-b656038980b3&appname=Exhibition3112&State=0" target="_blank" rel="noopener">
+          <img class="ph" src="img/ex-himalaya.jpg" width="500" height="300" alt="穿越喜瑪拉雅特展主視覺" loading="lazy" decoding="async">
+          <div class="body">
+            <span class="tag">特別展覽</span>
+            <h3>穿越喜瑪拉雅：從恆河到雪域的藝術行旅</h3>
+            <p class="meta">2026/10/08 – 2027/04/06 ・ S101 1F</p>
+            <p>集結美國魯賓喜瑪拉雅藝術博物館、大都會藝術博物館、華特斯藝術博物館與本院收藏，沿著恆河平原到西藏的路線看佛教藝術的流傳。</p>
+            <ul class="hl">
+              <li>《金剛鬘》組畫之四曼荼羅：15 世紀紐瓦爾畫師為西藏俄寺所繪，保存近乎完美的唐卡。</li>
+              <li>南天王像：院藏 15 世紀紅銅鎏金造像，高 67.8 公分，鑲嵌青金石與綠松石。</li>
+            </ul>
+            <p class="stay">建議停留約 1 小時・本期第一優先</p>
+          </div>
+        </a>
+        <a class="card has-img" href="https://south.npm.gov.tw/ExhibitionsDetailC003110.aspx?Cond=ac20c438-1a48-4f54-8484-fd437bef211f&appname=Exhibition3112&State=0" target="_blank" rel="noopener">
+          <img class="ph" src="img/ex-heavenly.jpg" width="500" height="300" alt="天團降臨：藝術中的仙佛組合主視覺" loading="lazy" decoding="async">
+          <div class="body">
+            <span class="tag">人氣國寶展</span>
+            <h3>天團降臨：藝術中的仙佛組合</h3>
+            <p class="meta">III 至 12/06 ・ IV 12/08 – 2027/03/07 ・ S302 3F</p>
+            <p>八仙、福祿壽三星、和合二仙、十八羅漢……這些神仙「團體」是怎麼組成的。北院國寶輪流南下，每期展件不同。</p>
+            <ul class="hl">
+              <li>明 吳彬《畫楞嚴廿五圓通佛像》冊（重要古物），分兩期展出。</li>
+              <li>清 雕象牙八仙渡海臂擱、竹雕和合二仙、乾隆洋彩開光十八羅漢膽瓶（重要古物）。</li>
+            </ul>
+            <p class="stay">建議停留約 30 分</p>
+          </div>
+        </a>
+        <a class="card has-img" href="https://south.npm.gov.tw/ExhibitionsDetailC003110.aspx?Cond=667d9387-f8be-47b9-a653-cd29a7ab158e&appname=Exhibition3111&State=1" target="_blank" rel="noopener">
+          <img class="ph" src="img/ex-fishing.jpg" width="500" height="300" alt="知漁之樂──漁樂圖特展主視覺" loading="lazy" decoding="async">
+          <div class="body">
+            <span class="tag">新展</span>
+            <h3>知漁之樂──漁樂圖特展</h3>
+            <p class="meta">2026/11/11 – 2027/02/14 ・ S203 2F</p>
+            <p>歷代畫家筆下的理想漁人生活：江上撒網的舟楫、蘆荻深處垂釣的漁父，以及漁暇時移舟相聚的宴飲。11/11 以後出發才看得到。</p>
+            <p class="stay">建議停留約 20 分</p>
+          </div>
+        </a>
+      </div>
+
+      <h3 class="sub">常設展</h3>
+      <ul class="ex-list">
+        <li><img src="img/ex-buddha.jpg" width="600" height="308" alt="" loading="lazy" decoding="async"><div><b>佛陀形影</b><small>S303 3F</small><span>院藏亞洲佛教藝術，從印度、東南亞到西藏與中國。必看藏文《龍藏經》、誕生佛、佛塔欄楯，護法神「持鉞刀黑天」與印度教女神像「杜爾噶砍殺魔牛」。約 40 分。</span></div></li>
+        <li><img src="img/ex-tea.jpg" width="500" height="301" alt="" loading="lazy" decoding="async"><div><b>東亞茶文化展</b><small>S202 2F</small><span>分「明人雅集」「清代品茗」「蒙藏奶茶」「日本茶文化」等單元，看各地怎麼喝茶。展品有長沙窯綠釉單柄壺、黑釉木葉紋茶盞、洋彩番蓮紋紅地茶壺。約 30 分。</span></div></li>
+        <li><img src="img/ex-calligraphy.jpg" width="500" height="300" alt="" loading="lazy" decoding="async"><div><b>揮翰學書—書法跨域新媒體展</b><small>S204 2F</small><span>四個互動單元：臨摹體驗、拓碑體驗、「千文宇宙」沉浸互動劇場、筆畫拼拼看，可以在平板上描摹書法。約 25 分。</span></div></li>
+        <li><img src="img/ex-chiayi.jpg" width="500" height="299" alt="" loading="lazy" decoding="async"><div><b>嘉義文史展</b><small>1F</small><span>嘉義舊稱諸羅，清乾隆年間林爽文事件後，乾隆皇帝御筆改名為「嘉義」。展覽從這段故事講起，看完特展可以順路逛。約 15 分。</span></div></li>
+      </ul>
+      <p class="credit">展覽圖片：故宮南院官網</p>
+
+      <h3 class="sub">園區地圖</h3>
+      <div id="park-map" role="region" aria-label="園區景點地圖"></div>
+      <p class="map-note"><span class="key-dot spot-photo">景</span>拍照點　<span class="key-dot spot-art">藝</span>公共藝術　<span class="key-dot spot-park">P</span>停車場　<span class="key-dot spot-bus">車</span>公車／接駁站。點標記看說明；位置取自 OpenStreetMap。</p>
+
+      <h3 class="sub">戶外拍照點</h3>
+      <div class="photos">
+        <figure>
+          <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Southern_Branch_of_the_National_Palace_Museum_main_building_and_zhimei_bridge.jpg/960px-Southern_Branch_of_the_National_Palace_Museum_main_building_and_zhimei_bridge.jpg" width="960" height="720" alt="至美橋與南院本館" loading="lazy" decoding="async">
+          <figcaption>
+            <b>至美橋</b>
+            <span>弧形跨湖橋，造型取自書法草書。從橋上回望館體是最經典的角度；下午三點後斜陽最好拍，11–12 月約 17:15 日落。入夜後橋身打上紅釉、粉青、霽青、甜白四色燈光。</span>
+            <small>攝影：<a href="https://commons.wikimedia.org/wiki/File:Southern_Branch_of_the_National_Palace_Museum_main_building_and_zhimei_bridge.jpg" target="_blank" rel="noopener">B2322858</a>・公有領域</small>
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/NPM_south_branch_Main_building_20250812.jpg/960px-NPM_south_branch_Main_building_20250812.jpg" width="960" height="735" alt="南院本館與墨韻樓圓盤外牆" loading="lazy" decoding="async">
+          <figcaption>
+            <b>墨韻樓圓盤外牆</b>
+            <span>三萬多枚鑄鋁圓盤組成的立面，近看有雲龍紋路，晴天最好拍。建築以濃墨、飛白、渲染三種水墨筆法為設計概念。</span>
+            <small>攝影：<a href="https://commons.wikimedia.org/wiki/File:NPM_south_branch_Main_building_20250812.jpg" target="_blank" rel="noopener">Yu tptw</a>・<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a></small>
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/20250718_102924_NPMSB_Jhihde_Lake_and_Lanyue_Bridge.jpg/960px-20250718_102924_NPMSB_Jhihde_Lake_and_Lanyue_Bridge.jpg" width="960" height="720" alt="至德湖與覽月橋" loading="lazy" decoding="async">
+          <figcaption>
+            <b>至德湖・覽月橋</b>
+            <span>覽月橋長約 80 公尺，像一條橫躺的隧道，橋身有不規則的鏤空開口；湖邊步道可以看天鵝和鴨子。</span>
+            <small>攝影：<a href="https://commons.wikimedia.org/wiki/File:20250718_102924_NPMSB_Jhihde_Lake_and_Lanyue_Bridge.jpg" target="_blank" rel="noopener">Saimmx</a>・CC0</small>
+          </figcaption>
+        </figure>
+      </div>
+      <h3 class="sub">公共藝術</h3>
+      <ul class="list">
+        <li><b>草間彌生《南瓜精靈》</b><span>她少數的石雕作品，花崗石加馬賽克，高約 176 公分，招牌圓點很好認。在本館東側，順著環湖路線就會經過。</span></li>
+        <li><b>千住博《亙古流長》</b><small>南側 P2 停車場附近</small><span>兩座玻璃屏風加起霧裝置，靈感來自阿里山的雲海與瀑布。</span></li>
+        <li><b>方惠光《古今華表》</b><small>至美橋旁</small><span>高 640 公分，以龍、象、馬三種圖騰代表中華、印度、波斯文化。</span></li>
+        <li><b>涂維政《鑑古爍今－繁花似錦》</b><small>北側入館路線</small><span>兩面各 900 塊交趾陶，北面紋樣取自院藏明永樂青花花卉紋扁壺，換角度看會有立體感。</span></li>
+        <li><b>王文志《戲分茶》</b><small>大千石庭附近</small><span>三顆金色鏤空茶團，象徵嘉義的茶產業。</span></li>
+      </ul>
+
+      <h3 class="sub">夜間光環境</h3>
+      <p class="sub-note">園區開到 22:00，日落後點燈；以下為官網介紹的光環境作品。</p>
+      <ul class="list">
+        <li><b>湖映至美</b><small>至美橋</small><span>以故宮瓷器的紅釉、粉青、霽青、甜白四色照亮橋身，湖面有倒影。</span></li>
+        <li><b>傍水揮毫</b><small>臨水廣場</small><span>投影院藏瓷器、琺瑯器與書法上的紋樣，例如龍鳳、牡丹、蝴蝶與黃庭堅的〈花氣薰人帖〉。</span></li>
+        <li><b>絲路尋境</b><small>圓形廣場</small><span>地面標示海上與陸上絲路，入夜後以水藍色波光呈現。</span></li>
+        <li><b>藝術光河</b><small>藝術之丘</small><span>園區高點定時放送雷射光束。</span></li>
+      </ul>
+      <a class="more" href="https://south.npm.gov.tw/ExhibitionsListC003110.aspx?appname=Exhibition3112" target="_blank" rel="noopener">官網當期展覽列表</a>
+    </div>
+  </section>
+
+  <!-- ========== 交通 ========== -->
+  <section class="page" id="go" aria-labelledby="h-go" hidden>
+    <div class="wrap">
+      <div class="page-head"><h2 id="h-go">如何到南院</h2><div class="en">Getting There</div></div>
+      <div class="notice"><b>2026 年異動：</b>台灣好行 106 已於 9/1 停駛，舊攻略還寫著它。BRT 7212 在 <b>12/31 前</b>，到故宮南院站上下車或持高鐵票都免費。</div>
+      <div class="cards">
+        <div class="card">
+          <h3>開車</h3>
+          <p class="time">國道接台 82 快速道路</p>
+          <p>國道 1 號或國道 3 號接台 82 東石嘉義線往太保，依指標到故宮大道。小客車停車每次約 NT$50–60。</p>
+          <p>假日南側停車場容易滿，可改停北側停車場，再搭園區免費接駁車（約 30 分一班）。</p>
+          <ul class="park-list">
+            <li><b>南側 P1、P2</b>經臨水廣場、遊客中心、至美橋步行入館，沿路就是拍照點。<a href="https://www.google.com/maps/search/?api=1&query=23.469710,120.294939" target="_blank" rel="noopener">P1 導航</a><a href="https://www.google.com/maps/search/?api=1&query=23.469997,120.292330" target="_blank" rel="noopener">P2 導航</a></li>
+            <li><b>北側 P3、P4</b>從故宮北路進入，經慶典花園與公共藝術《鑑古爍今》步行入館；離蒜頭糖廠也近。<a href="https://www.google.com/maps/search/?api=1&query=23.477546,120.292764" target="_blank" rel="noopener">P3 導航</a><a href="https://www.google.com/maps/search/?api=1&query=23.477533,120.294092" target="_blank" rel="noopener">P4 導航</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>高鐵 ＋ 接駁</h3>
+          <p class="time">高鐵嘉義站轉乘</p>
+          <p>搭高鐵到嘉義站；搭台鐵的話，可在新左營、新烏日等與高鐵共站的車站換乘。</p>
+          <p>由 2 號出口轉乘：BRT 7212（往朴子）到「故宮南院(1館接駁站)」，或搭高鐵免費接駁車（週二至週日，約每小時一班）。計程車約 NT$180–250。</p>
+          <table class="tt">
+            <caption>高鐵嘉義站 ⇄ 故宮南院 發車時間</caption>
+            <thead><tr><th></th><th>往南院（高鐵站發車）</th><th>回高鐵（南院發車）</th></tr></thead>
+            <tbody>
+              <tr><th>免費接駁車</th><td>08:45 起每小時 :45，末班 16:45<br><small>假日加開 17:35</small></td><td>09:30 起每小時 :30，16:30、17:20<br><small>假日加開 18:20</small></td></tr>
+              <tr><th>BRT 7212</th><td>08:30 起約每小時 :30，末班 17:30<br><small>11:50 加開一班</small></td><td>08:50、09:40、09:50、10:50、11:50、12:10、12:50、13:50、14:50、15:50、17:00，末班 17:50</td></tr>
+            </tbody>
+          </table>
+          <p class="tt-note">免費接駁週二至週日行駛（官網 2025/07 版時刻表）；BRT 依嘉義客運 2026/09/01 版時刻表，詳細班次以官網為準。</p>
+          <p>其他公車：166、7235 到「故宮南院站（南大門）」；黃 9 到 1 館接駁站；105 到「故宮南院北站」，下車後走約 15 分鐘到入口。</p>
+        </div>
+        <div class="card">
+          <h3>假日五分車</h3>
+          <p class="time">想體驗再搭</p>
+          <p>台糖「尋蜜號」往返蒜頭糖廠與南院北側停車場，以假日行駛為主，班次少。</p>
+          <p>大人票約 NT$150（南院線），一定要先查台糖官網時刻表。</p>
+        </div>
+      </div>
+      <div class="notice"><b>晚上回程：</b>大眾運輸最晚是假日 18:20 的高鐵免費接駁，平日 BRT 末班 17:50。要看夕陽或夜景，建議開車或預約計程車。</div>
+      <a class="more" href="https://south.npm.gov.tw/Visit/Traffic/MassTransit.htm" target="_blank" rel="noopener">官網大眾運輸與接駁時刻表</a>
+    </div>
+  </section>
+
+  <!-- ========== 美食 ========== -->
+  <section class="page" id="food" aria-labelledby="h-food" hidden>
+    <div class="wrap">
+      <div class="page-head">
+        <h2 id="h-food">周邊美食</h2><div class="en">Where to Eat</div>
+        <p>館內選擇不多，太保市區開車 5–10 分鐘就有很多小吃。點編號可在地圖上定位。</p>
+        <p>店名旁的「營業中／休息中」依整理到的營業時間與台灣時間推算，國定假日和臨時公休無法反映。</p>
+      </div>
+      <div class="chips" role="group" aria-label="地圖範圍">
+        <button type="button" data-area="南院" aria-pressed="true">南院周邊</button>
+        <button type="button" data-area="太保" aria-pressed="false">太保市區</button>
+        <button type="button" data-area="朴子" aria-pressed="false">朴子</button>
+        <button type="button" data-area="嘉義市" aria-pressed="false">嘉義市</button>
+        <button type="button" data-area="" aria-pressed="false">全部</button>
+      </div>
+      <div id="map" role="region" aria-label="美食地圖"></div>
+      <p class="map-note">標記依地址定位，可能與實際入口有些許落差；朴子夜市、文化路夜市為路段位置。虛線圈是距南院的直線距離；點編號可看從南大門（P1 停車場）開車的估算距離與時間，實際依路況而定。</p>
+
+      <h3 class="sub">南院周邊</h3>
+      <ul class="shops" data-area="南院"></ul>
+      <h3 class="sub">太保市區<small style="font-weight:400;color:var(--muted);font-size:.8rem;margin-left:.5rem;letter-spacing:.04em">開車約 5 分鐘</small></h3>
+      <ul class="shops" data-area="太保"></ul>
+      <h3 class="sub">朴子</h3>
+      <ul class="shops" data-area="朴子"></ul>
+      <h3 class="sub">嘉義市</h3>
+      <ul class="shops" data-area="嘉義市"></ul>
+      <p class="map-note" style="margin-top:1rem">地址、營業時間整理自部落客與旅遊媒體（2020–2026），店家可能調整，出發前請以 Google 地圖或電話確認。</p>
+      <p class="map-note">素食：南院周邊沒有查到專門的素食餐廳，上列店家也沒有可靠的素食資訊；需要素食請先打電話詢問。</p>
+    </div>
+  </section>
+
+  <!-- ========== 準備 ========== -->
+  <section class="page" id="prep" aria-labelledby="h-prep" hidden>
+    <div class="wrap">
+      <div class="page-head"><h2 id="h-prep">出發前確認</h2><div class="en">Before You Go</div></div>
+      <ul class="check">
+        <li><label><input type="checkbox"><span>確認出發日不是週一，或已列入 2026 年週一開館日</span></label></li>
+        <li><label><input type="checkbox"><span>上官網看當期特展與展覽預告（S201 下一檔展覽、天團降臨換期）</span></label></li>
+        <li><label><input type="checkbox"><span>搭大眾運輸：查 BRT 7212 與高鐵免費接駁車時刻，記下回程末班</span></label></li>
+        <li><label><input type="checkbox"><span>看夕陽或夜遊：確認當天日落時間與回程方式</span></label></li>
+        <li><label><input type="checkbox"><span>查天氣：午後雷陣雨或颱風，把戶外行程挪到上午</span></label></li>
+        <li><label><input type="checkbox"><span>假日想坐五分車：查台糖時刻表</span></label></li>
+        <li><label><input type="checkbox"><span>假日要吃野爺鍋物：先訂位</span></label></li>
+        <li><label><input type="checkbox"><span>二日遊：訂好南院旁或嘉義市區住宿</span></label></li>
+        <li><label><input type="checkbox"><span>帶水壺、帽子、防蚊液</span></label></li>
+      </ul>
+
+      <h3 class="sub">實用撇步</h3>
+      <ol class="tips">
+        <li><div><h3>優惠票</h3><p>未滿 18 歲、本國學生、身障者及一位陪同者免費；65 歲以上本國籍長者 2026 年平日、假日都免費；嘉義縣市居民下午 3 點後免費（至 12/31）。</p></div></li>
+        <li><div><h3>週一原則休館</h3><p>2026 年有配合連假的週一開館日，請查官網公告。戶外園區天天開放。</p></div></li>
+        <li><div><h3>寄物櫃</h3><p>本館 2F 售票處旁有投幣式寄物櫃（退幣型），大包包先寄再看展。</p></div></li>
+        <li><div><h3>展廳規定</h3><p>展廳內禁止飲食與閃光燈，部分展件不能拍照，請依現場標示。</p></div></li>
+        <li><div><h3>防曬與好走的鞋</h3><p>園區約 70 公頃，戶外幾乎沒遮蔭。帶帽子、水壺，傍晚加防蚊液。</p></div></li>
+        <li><div><h3>免費開放日</h3><p>1/1、元宵節、5/18、9/27、10/10 全館免費參觀，人潮也最多。</p></div></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<nav class="tabbar" aria-label="分頁">
+  <ul>
+    <li><a href="#home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></svg>總覽</a></li>
+    <li><a href="#plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>行程</a></li>
+    <li><a href="#see"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="4" width="18" height="16"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg>看展</a></li>
+    <li><a href="#go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="3" width="14" height="14" rx="2"/><path d="M5 11h14M8 17l-2 4M16 17l2 4"/><circle cx="8.5" cy="14" r=".8" fill="currentColor"/><circle cx="15.5" cy="14" r=".8" fill="currentColor"/></svg>交通</a></li>
+    <li><a href="#food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 11h18a9 9 0 0 1-18 0zM8 3c0 2 2 2 2 4M13 3c0 2 2 2 2 4"/></svg>美食</a></li>
+    <li><a href="#prep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="3" width="16" height="18"/><path d="m8 9 2 2 4-4M8 16h8"/></svg>準備</a></li>
+  </ul>
+</nav>
+
+<script src="js/shops.js"></script>
+<script src="js/spots.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
