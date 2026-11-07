@@ -70,6 +70,62 @@ function renderStatus() {
   });
 }
 
+// ---------- 依日期自動更新：過期提醒、今日開館、日落 ----------
+const todayStr = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei' }).format(new Date());
+// data-from／data-until（含當天）範圍外的內容自動隱藏；提醒框裡的項目都過期就整框收起
+function applyDates() {
+  const today = todayStr();
+  document.querySelectorAll('[data-from], [data-until]').forEach(el => {
+    const { from, until } = el.dataset;
+    el.hidden = !!((from && today < from) || (until && today > until));
+  });
+  document.querySelectorAll('.notice').forEach(n => {
+    const items = [...n.querySelectorAll(':scope > .ni')];
+    if (items.length) n.hidden = items.every(i => i.hidden);
+  });
+  // 資料確認日期超過 60 天，提醒以官網為準
+  document.querySelectorAll('.asof[data-date]').forEach(el => {
+    el.classList.toggle('stale', (Date.parse(today) - Date.parse(el.dataset.date)) / 864e5 > 60);
+  });
+}
+
+// 南院日落時間（NOAA 簡化公式，回傳台灣時間的分鐘數）
+function sunsetMin(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const n = (Date.UTC(y, m - 1, d) - Date.UTC(y, 0, 0)) / 864e5;
+  const g = 2 * Math.PI / 365 * (n - 1);
+  const eqt = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+  const decl = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+  const lat = MUSEUM[0] * Math.PI / 180;
+  const ha = Math.acos(Math.cos(90.833 * Math.PI / 180) / (Math.cos(lat) * Math.cos(decl)) - Math.tan(lat) * Math.tan(decl));
+  return Math.round(720 - 4 * (MUSEUM[1] - ha * 180 / Math.PI) - eqt + 480);
+}
+
+// 展廳：週二至週五 09:00–17:00、週末 09:00–18:00、週一休館（國定假日與連假週一無法反映）
+const FREE_DAYS = ['01-01', '05-18', '09-27', '10-10'];
+function museumStatus() {
+  const { day, min } = taipeiNow();
+  const today = todayStr();
+  const close = day >= 6 ? 18 * 60 : 17 * 60;
+  let st;
+  if (day === 1) st = { cls: 'off', text: '今天週一，展廳休館；戶外園區照常開放' };
+  else if (min < 9 * 60) st = { cls: 'later', text: '展廳 09:00 開館，今天開到 ' + hhmm(close) };
+  else if (min < close) st = { cls: 'open', text: '展廳開放中・到 ' + hhmm(close) };
+  else st = { cls: 'off', text: '展廳今日已閉館' + (min < 22 * 60 ? '；戶外園區開到 22:00' : '') };
+  if (FREE_DAYS.includes(today.slice(5)) && day !== 1) st.text += '・今天全館免費';
+  st.sun = '今天日落約 ' + hhmm(sunsetMin(today));
+  return st;
+}
+function renderToday() {
+  applyDates();
+  const st = museumStatus();
+  const el = document.getElementById('today-status');
+  el.hidden = false;
+  el.innerHTML = '<b>今日南院</b><span class="status ' + st.cls + '">' + st.text + '</span><small>' + st.sun + '・國定假日與連假週一的開館時間請查官網</small>';
+  const [, m, d] = todayStr().split('-').map(Number);
+  document.querySelectorAll('.sun-today').forEach(s => { s.textContent = '今天（' + m + '/' + d + '）約 ' + hhmm(sunsetMin(todayStr())); });
+}
+
 const driveText = s => s.drive === '館內' ? '就在南院館內' : '南大門開車' + s.drive;
 
 document.querySelectorAll('.shops').forEach(ul => {
@@ -94,11 +150,12 @@ document.querySelectorAll('.shops').forEach(ul => {
     ul.appendChild(li);
   });
 });
+const MUSEUM = [23.47384, 120.29233];   // 南院本館（OSM）
 renderStatus();
-setInterval(renderStatus, 60000);
+renderToday();
+setInterval(() => { renderStatus(); renderToday(); }, 60000);
 
 let map;
-const MUSEUM = [23.47384, 120.29233];   // 南院本館（OSM）
 const markers = new Map();
 // OpenStreetMap 圖磚：需經 http(s) 開啟（file:// 沒有 Referer 會被擋），本機預覽請用 localhost
 const osmLayer = () => L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

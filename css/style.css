@@ -2200,6 +2200,55 @@ body:has(#home:not([hidden])) {
   letter-spacing: .1em;
   color: var(--hm-sumi2);
 }
+.asof.stale::after {
+  content: "・已超過兩個月，請以官網公告為準";
+  color: #A8741A;
+}
+/* 依日期自動隱藏的內容（hidden 要壓過各元件自己的 display） */
+[data-from][hidden],
+[data-until][hidden],
+.notice[hidden],
+.today[hidden] {
+  display: none !important;
+}
+.notice .ni {
+  display: block;
+}
+.notice .ni + .ni {
+  margin-top: .3rem;
+}
+em[data-from],
+em[data-until] {
+  font-style: normal;
+}
+/* 首頁：今日南院 */
+.today {
+  margin: 0 0 1.25rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--hm-hair);
+  border-left: 2px solid var(--hm-jade);
+  background: var(--surface);
+  line-height: 1.7;
+}
+.today b {
+  display: block;
+  font-family: var(--brush);
+  letter-spacing: .12em;
+  color: var(--hm-jade);
+}
+.today .status {
+  margin-left: 0;
+  white-space: normal;
+}
+.today small {
+  display: block;
+  margin-top: .3rem;
+  font-size: .78rem;
+  color: var(--muted);
+}
+.sun-today {
+  color: var(--hm-jade) !important;
+}
 .plan-note,
 .sub-note {
   margin: .8rem 0 0;

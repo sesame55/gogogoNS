@@ -4,15 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>故宮南院一日遊</title>
+<meta name="description" content="故宮南院（嘉義太保）一日遊攻略：推薦行程、當期展覽與拍照點、高鐵接駁與開車停車、周邊美食地圖與出發前清單。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="故宮南院一日遊">
+<meta property="og:title" content="故宮南院一日遊">
+<meta property="og:description" content="湖光、水墨與亞洲藝術。推薦行程、當期展覽、交通接駁與周邊美食，一頁整理好。">
+<meta property="og:url" content="https://sesame55.github.io/gogogoNS/">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Southern_Branch_of_the_National_Palace_Museum_main_building_and_zhimei_bridge.jpg/1280px-Southern_Branch_of_the_National_Palace_Museum_main_building_and_zhimei_bridge.jpg">
+<meta property="og:image:alt" content="至善湖畔的至美橋與南院本館">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F7F7F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111514" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <script>
   // 先套用上次選的主題，避免閃爍
   try { const t = localStorage.getItem('npm-south-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Lora:ital,wght@0,500;0,600;1,500&family=Noto+Serif+TC:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Serif+TC:wght@500;600&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -21,7 +34,7 @@
   <div class="wrap">
     <a class="brand" href="#home">
       <span class="brand-mark" aria-hidden="true">南</span>
-      <span class="brand-name"><b>故宮南院行程</b><small>A Day Trip in Chiayi</small></span>
+      <span class="brand-name"><b>故宮南院一日遊</b><small>A Day Trip in Chiayi</small></span>
     </a>
     <button class="theme-btn" id="theme-btn" type="button"></button>
   </div>
@@ -100,10 +113,16 @@
           <p class="ik-label">Before You Go</p>
           <h2 class="ik-h2">出發前，<br>先看這裡</h2>
           <p class="ik-p">館內至少留 3–4 小時。早上開館人最少，戶外拍照留到下午三點以後的斜陽。</p>
-          <div class="notice"><b>11/15 截止：</b>「乾清宮尋寶」與「妙色—清代金銀飾件」兩檔特展即將結束，S201 展廳的下一檔展覽官網尚未公告。<br><b>11/11 開展：</b>「知漁之樂──漁樂圖特展」（S203 2F）。<br><b>週一休館：</b>戶外園區照常開放。</div>
-          <p class="asof">資料確認日期：2026 年 11 月 7 日</p>
+          <div class="notice">
+            <span class="ni" data-until="2026-11-15"><b>11/15 截止：</b>「乾清宮尋寶」與「妙色—清代金銀飾件」兩檔特展即將結束，S201 展廳的下一檔展覽官網尚未公告。</span>
+            <span class="ni" data-until="2026-11-10"><b>11/11 開展：</b>「知漁之樂──漁樂圖特展」（S203 2F）。</span>
+            <span class="ni" data-from="2026-11-11" data-until="2027-02-14"><b>展出中：</b>「知漁之樂──漁樂圖特展」（S203 2F，至 2/14）。</span>
+            <span class="ni"><b>週一休館：</b>戶外園區照常開放。</span>
+          </div>
+          <p class="asof" data-date="2026-11-07">資料確認日期：2026 年 11 月 7 日</p>
         </div>
         <div class="rv">
+          <p class="today" id="today-status" hidden></p>
           <dl class="info">
       <div><dt>展廳・週二至週五</dt><dd>09:00–17:00</dd></div>
       <div><dt>展廳・週末與國定假日</dt><dd>09:00–18:00</dd></div>
@@ -217,7 +236,7 @@
       <div class="panel" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
         <ol class="timeline">
           <li><time>早上</time><div><h3>出發</h3><p>依出發地抓好時間，09:00 開館時抵達。開車可停南側 P1、P2；搭大眾運輸的話，可接 08:30 從高鐵嘉義站發車的 BRT 7212，或 08:45 的免費接駁車。</p></div></li>
-          <li class="key"><time>09:00</time><div><h3><span class="tag">展覽</span>3F 往下逛</h3><p>3F 天團降臨、佛陀形影 → 2F 東亞茶文化、書法新媒體、漁樂圖 → 1F 穿越喜瑪拉雅特展。可在售票處租語音導覽。</p></div></li>
+          <li class="key"><time>09:00</time><div><h3><span class="tag">展覽</span>3F 往下逛</h3><p>3F <span data-until="2027-03-07">天團降臨、</span>佛陀形影 → 2F 東亞茶文化、書法新媒體<span data-from="2026-11-11" data-until="2027-02-14">、漁樂圖</span><span data-until="2027-04-06"> → 1F 穿越喜瑪拉雅特展</span>。可在售票處租語音導覽。</p></div></li>
           <li><time>12:00</time><div><h3>午餐</h3><p>館內 1F 野爺鍋物（假日建議訂位），或開車 5–10 分鐘到太保市區吃築日食堂、丁家魯肉飯、食光雞火雞肉飯。</p></div></li>
           <li><time>13:30</time><div><h3><span class="tag">展覽</span>補看展廳＋禮品店</h3><p>回展廳補看上午沒看完的，或看嘉義文史展，再逛禮品店。</p></div></li>
           <li class="key"><time>14:45</time><div><h3><span class="tag">園區</span>環湖散步</h3><p>至善湖、至德湖步道，覽月橋、草間彌生《南瓜精靈》。</p></div></li>
@@ -230,26 +249,35 @@
 
 
       <div class="panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
-        <p class="day-title"><span>Day 1</span>南院慢慢看＋夜遊</p>
+        <p class="day-title"><span>Day 1</span>南院慢慢看＋夕陽夜景</p>
         <ol class="timeline">
           <li><time>早上</time><div><h3>出發</h3><p>開車，或搭高鐵到嘉義站再轉 BRT 7212、免費接駁車。</p></div></li>
           <li class="key"><time>09:00</time><div><h3><span class="tag">展覽</span>南院展館</h3><p>不用趕，三層樓完整看完，再加看嘉義文史展。</p></div></li>
           <li><time>12:00</time><div><h3>午餐</h3><p>館內野爺鍋物，或太保市區小吃。</p></div></li>
           <li><time>13:30</time><div><h3><span class="tag">展覽</span>補看展廳＋禮品店</h3><p>上午沒看完的展廳在這時補齊。</p></div></li>
           <li><time>15:00</time><div><h3>蒜頭糖廠</h3><p>假日可搭五分車過去，逛蔗埕文化園區、吃枝仔冰。</p></div></li>
-          <li class="key"><time>17:00</time><div><h3><span class="tag">拍照</span>回南院看夕陽與夜景</h3><p>園區開到 22:00，臨水廣場一帶夜間有燈光；夏季有水舞秀（2026 場次請查官網公告）。</p></div></li>
+          <li class="key"><time>17:00</time><div><h3><span class="tag">拍照</span>回南院看夕陽與夜景</h3><p>園區開到 22:00，臨水廣場一帶夜間有燈光；暑假期間有水舞展演（場次請查官網公告）。</p></div></li>
           <li><time>19:00</time><div><h3>入住</h3><p>南院旁有長榮文苑等飯店；想逛夜市就住嘉義市區，去文化路夜市。</p></div></li>
         </ol>
 
         <p class="day-title"><span>Day 2</span>嘉義市區慢遊</p>
         <ol class="timeline">
           <li><time>08:30</time><div><h3>早餐</h3><p>雞肉飯或在地早餐店。</p></div></li>
-          <li><time>09:30</time><div><h3>檜意森活村</h3><p>日式木造宿舍群，散步拍照。BRT 7212 在文化中心站下車，年底前免費。</p></div></li>
+          <li><time>09:30</time><div><h3>檜意森活村</h3><p>日式木造宿舍群，散步拍照。BRT 7212 在文化中心站下車<em data-until="2026-12-31">，年底前免費</em>。</p></div></li>
           <li><time>11:00</time><div><h3>阿里山林業村／北門驛</h3><p>就在旁邊，看老火車與車庫。</p></div></li>
           <li><time>12:30</time><div><h3>午餐</h3><p>市區小吃，砂鍋魚頭也很有名。</p></div></li>
           <li><time>14:00</time><div><h3>嘉義公園＋射日塔</h3><p>登塔看嘉義市景。</p></div></li>
           <li><time>16:30</time><div><h3>回程</h3><p>提早出發避開晚間車潮。</p></div></li>
         </ol>
+
+        <p class="day-title"><span>Stay</span>住宿參考</p>
+        <ul class="list">
+          <li><b>長榮文苑酒店</b><small>南院對面</small><span>嘉義縣太保市故宮大道777號。走路就到南院，適合看完夜景、隔天一早再逛園區。</span></li>
+          <li><b>福泰桔子商旅（文化店）</b><small>文化路夜市旁</small><span>嘉義市西區文化路169號。步行約 1 分鐘到噴水圓環與文化路夜市。</span></li>
+          <li><b>承億文旅桃城茶樣子</b><small>嘉義市區</small><span>嘉義市東區忠孝路516號。以茶為主題的設計旅店。</span></li>
+          <li><b>耐斯王子大飯店</b><small>嘉義市區</small><span>嘉義市東區忠孝路600號。樓下是百貨公司，吃飯購物方便。</span></li>
+        </ul>
+        <p class="sub-note">地址整理自訂房平台與旅遊媒體，房型與設施請以飯店或訂房平台為準。</p>
       </div>
 
       <h3 class="sub">下雨與季節</h3>
@@ -257,7 +285,19 @@
         <li><b>下雨天</b><span>展廳全在室內，雨天就把時間留給 3 層展廳，照「看展」頁的動線慢慢看，午餐在館內 1F 解決。停車場到本館要走一段戶外步道，園區內有接駁車往返停車場與一館接駁站，班次以官網「園區內接駁服務」為準。</span></li>
         <li><b>5–9 月</b><span>午後雷陣雨多，戶外拍照排在上午或傍晚，中午進展廳避雨避曬。颱風天請先看官網有沒有休館公告。</span></li>
         <li><b>10–4 月</b><span>雨少、氣溫舒服，最適合環湖散步。冬天早晚涼、平原風大，帶件外套。</span></li>
-        <li><b>日落時間</b><span>11–1 月約 17:15–17:30、3 月約 18:05、6 月約 18:45、10 月約 17:30（依南院經緯度計算）。至美橋夕陽與夜景都以這個時間往回推。</span></li>
+        <li><b>日落時間</b><small class="sun-today"></small><span>11–1 月約 17:15–17:30、3 月約 18:05、6 月約 18:45、10 月約 17:30（依南院經緯度計算）。至美橋夕陽與夜景都以這個時間往回推。</span></li>
+      </ul>
+
+      <h3 class="sub">年度活動</h3>
+      <p class="sub-note">每年固定的節日與季節活動，日期與場次以主辦單位公告為準。</p>
+      <ul class="list">
+        <li><b>1/1 元旦</b><span>南院全館免費參觀，人潮多，建議一開館就到。</span></li>
+        <li><b>元宵節</b><span>南院全館免費參觀。朴子配天宮有「御賜燈花」慶典，可以和朴子美食排在一起。</span></li>
+        <li><b>5/18 國際博物館日</b><span>南院全館免費參觀。</span></li>
+        <li><b>暑假</b><span>近年暑假晚上有水舞展演（例如 2024 年的「水樂之夜」），場次請查官網公告。</span></li>
+        <li><b>9/27、10/10</b><span>南院全館免費參觀。</span></li>
+        <li><b>11 月–隔年 3 月</b><span>鰲鼓濕地賞鳥季，冬候鳥最多；從南院開車約 23 分鐘。</span></li>
+        <li><b>12 月下旬</b><span>嘉義市國際管樂節，有管樂踩街與戶外音樂會<em data-until="2027-01-01">（2026 年為 12/18–2027/1/1，12/19 踩街）</em>，適合排進二日遊。</span></li>
       </ul>
 
       <h3 class="sub">順遊景點</h3>
@@ -289,20 +329,24 @@
         <h2 id="h-see">看展與拍照</h2><div class="en">Exhibitions & Photo Spots</div>
         <p>展廳從 3 樓往下逛最順。展覽會輪替，出發前請再上官網核對。</p>
       </div>
-      <div class="notice"><b>即將結束：</b>「乾清宮尋寶」與「妙色—清代金銀飾件」（S201 2F）展到 11/15，下一檔展覽官網尚未公告。<br><b>換檔：</b>天團降臨 12/6 展完第 III 期，12/8 起換第 IV 期展件。</div>
-      <p class="asof">展覽資訊確認日期：2026 年 11 月 7 日</p>
+      <div class="notice">
+        <span class="ni" data-until="2026-11-15"><b>即將結束：</b>「乾清宮尋寶」與「妙色—清代金銀飾件」（S201 2F）展到 11/15，下一檔展覽官網尚未公告。</span>
+        <span class="ni" data-from="2026-11-16" data-until="2026-12-31"><b>S201 換展中：</b>「乾清宮尋寶」與「妙色」已於 11/15 結束，下一檔展覽請查官網。</span>
+        <span class="ni" data-until="2026-12-07"><b>換檔：</b>天團降臨 12/6 展完第 III 期，12/8 起換第 IV 期展件。</span>
+      </div>
+      <p class="asof" data-date="2026-11-07">展覽資訊確認日期：2026 年 11 月 7 日</p>
 
       <h3 class="sub">建議動線</h3>
       <ol class="route">
-        <li><b>3F</b><span>S301 導覽大廳 → S302 天團降臨 → S303 佛陀形影</span><small>約 1 小時 15 分</small></li>
-        <li><b>2F</b><span>S202 東亞茶文化 → S203 漁樂圖 → S204 書法新媒體</span><small>約 1 小時 15 分</small></li>
-        <li><b>1F</b><span>S101 穿越喜瑪拉雅 → 嘉義文史展</span><small>約 1 小時 15 分</small></li>
+        <li><b>3F</b><span>S301 導覽大廳<em data-until="2027-03-07"> → S302 天團降臨</em> → S303 佛陀形影</span><small>約 1 小時 15 分</small></li>
+        <li><b>2F</b><span>S202 東亞茶文化<em data-from="2026-11-11" data-until="2027-02-14"> → S203 漁樂圖</em> → S204 書法新媒體</span><small>約 1 小時 15 分</small></li>
+        <li><b>1F</b><span><em data-until="2027-04-06">S101 穿越喜瑪拉雅 → </em>嘉義文史展</span><small>約 1 小時 15 分</small></li>
       </ol>
       <p class="sub-note">停留時間是依展廳規模估算，全部看完約 3.5–4 小時；時間不夠就先看 1F 特展和 3F。</p>
 
       <h3 class="sub">當期展覽</h3>
       <div class="cards">
-        <a class="card has-img" href="https://south.npm.gov.tw/ExhibitionsDetailC003110.aspx?Cond=39beb118-6ab1-41b4-aa69-b656038980b3&appname=Exhibition3112&State=0" target="_blank" rel="noopener">
+        <a class="card has-img" data-until="2027-04-06" href="https://south.npm.gov.tw/ExhibitionsDetailC003110.aspx?Cond=39beb118-6ab1-41b4-aa69-b656038980b3&appname=Exhibition3112&State=0" target="_blank" rel="noopener">
           <img class="ph" src="img/ex-himalaya.jpg" width="500" height="300" alt="穿越喜瑪拉雅特展主視覺" loading="lazy" decoding="async">
           <div class="body">
             <span class="tag">特別展覽</span>
@@ -316,12 +360,12 @@
             <p class="stay">建議停留約 1 小時・本期第一優先</p>
           </div>
         </a>
-        <a class="card has-img" href="https://south.npm.gov.tw/ExhibitionsDetailC003110.aspx?Cond=ac20c438-1a48-4f54-8484-fd437bef211f&appname=Exhibition3112&State=0" target="_blank" rel="noopener">
+        <a class="card has-img" data-until="2027-03-07" href="https://south.npm.gov.tw/ExhibitionsDetailC003110.aspx?Cond=ac20c438-1a48-4f54-8484-fd437bef211f&appname=Exhibition3112&State=0" target="_blank" rel="noopener">
           <img class="ph" src="img/ex-heavenly.jpg" width="500" height="300" alt="天團降臨：藝術中的仙佛組合主視覺" loading="lazy" decoding="async">
           <div class="body">
             <span class="tag">人氣國寶展</span>
             <h3>天團降臨：藝術中的仙佛組合</h3>
-            <p class="meta">III 至 12/06 ・ IV 12/08 – 2027/03/07 ・ S302 3F</p>
+            <p class="meta"><em data-until="2026-12-06">III 至 12/06 ・ </em>IV 12/08 – 2027/03/07 ・ S302 3F</p>
             <p>八仙、福祿壽三星、和合二仙、十八羅漢……這些神仙「團體」是怎麼組成的。北院國寶輪流南下，每期展件不同。</p>
             <ul class="hl">
               <li>明 吳彬《畫楞嚴廿五圓通佛像》冊（重要古物），分兩期展出。</li>
@@ -330,13 +374,13 @@
             <p class="stay">建議停留約 30 分</p>
           </div>
         </a>
-        <a class="card has-img" href="https://south.npm.gov.tw/ExhibitionsDetailC003110.aspx?Cond=667d9387-f8be-47b9-a653-cd29a7ab158e&appname=Exhibition3111&State=1" target="_blank" rel="noopener">
+        <a class="card has-img" data-until="2027-02-14" href="https://south.npm.gov.tw/ExhibitionsDetailC003110.aspx?Cond=667d9387-f8be-47b9-a653-cd29a7ab158e&appname=Exhibition3111&State=1" target="_blank" rel="noopener">
           <img class="ph" src="img/ex-fishing.jpg" width="500" height="300" alt="知漁之樂──漁樂圖特展主視覺" loading="lazy" decoding="async">
           <div class="body">
-            <span class="tag">新展</span>
+            <span class="tag">特展</span>
             <h3>知漁之樂──漁樂圖特展</h3>
             <p class="meta">2026/11/11 – 2027/02/14 ・ S203 2F</p>
-            <p>歷代畫家筆下的理想漁人生活：江上撒網的舟楫、蘆荻深處垂釣的漁父，以及漁暇時移舟相聚的宴飲。11/11 以後出發才看得到。</p>
+            <p>歷代畫家筆下的理想漁人生活：江上撒網的舟楫、蘆荻深處垂釣的漁父，以及漁暇時移舟相聚的宴飲。<em data-until="2026-11-10">11/11 以後出發才看得到。</em></p>
             <p class="stay">建議停留約 20 分</p>
           </div>
         </a>
@@ -407,7 +451,10 @@
   <section class="page" id="go" aria-labelledby="h-go" hidden>
     <div class="wrap">
       <div class="page-head"><h2 id="h-go">如何到南院</h2><div class="en">Getting There</div></div>
-      <div class="notice"><b>2026 年異動：</b>台灣好行 106 已於 9/1 停駛，舊攻略還寫著它。BRT 7212 在 <b>12/31 前</b>，到故宮南院站上下車或持高鐵票都免費。</div>
+      <div class="notice">
+        <span class="ni" data-until="2027-12-31"><b>停駛：</b>台灣好行 106 已於 2026/9/1 停駛，舊攻略還寫著它。</span>
+        <span class="ni" data-until="2026-12-31"><b>12/31 前：</b>BRT 7212 到故宮南院站上下車或持高鐵票都免費。</span>
+      </div>
       <div class="cards">
         <div class="card">
           <h3>開車</h3>
@@ -483,8 +530,8 @@
     <div class="wrap">
       <div class="page-head"><h2 id="h-prep">出發前確認</h2><div class="en">Before You Go</div></div>
       <ul class="check">
-        <li><label><input type="checkbox"><span>確認出發日不是週一，或已列入 2026 年週一開館日</span></label></li>
-        <li><label><input type="checkbox"><span>上官網看當期特展與展覽預告（S201 下一檔展覽、天團降臨換期）</span></label></li>
+        <li><label><input type="checkbox"><span>確認出發日不是週一（部分連假的週一會開館，見官網公告）</span></label></li>
+        <li><label><input type="checkbox"><span>上官網看當期特展與展覽預告<em data-until="2026-12-07">（S201 下一檔展覽、天團降臨換期）</em></span></label></li>
         <li><label><input type="checkbox"><span>搭大眾運輸：查 BRT 7212 與高鐵免費接駁車時刻，記下回程末班</span></label></li>
         <li><label><input type="checkbox"><span>看夕陽或夜遊：確認當天日落時間與回程方式</span></label></li>
         <li><label><input type="checkbox"><span>查天氣：午後雷陣雨或颱風，把戶外行程挪到上午</span></label></li>
@@ -496,8 +543,8 @@
 
       <h3 class="sub">實用撇步</h3>
       <ol class="tips">
-        <li><div><h3>優惠票</h3><p>未滿 18 歲、本國學生、身障者及一位陪同者免費；65 歲以上本國籍長者 2026 年平日、假日都免費；嘉義縣市居民下午 3 點後免費（至 12/31）。</p></div></li>
-        <li><div><h3>週一原則休館</h3><p>2026 年有配合連假的週一開館日，請查官網公告。戶外園區天天開放。</p></div></li>
+        <li><div><h3>優惠票</h3><p>未滿 18 歲、本國學生、身障者及一位陪同者免費<em data-until="2026-12-31">；65 歲以上本國籍長者 2026 年平日、假日都免費；嘉義縣市居民下午 3 點後免費（至 12/31）</em>。<em data-from="2027-01-01">長者與在地居民優惠請查官網票價公告。</em></p></div></li>
+        <li><div><h3>週一原則休館</h3><p>部分連假的週一會開館，請查官網公告。戶外園區天天開放。</p></div></li>
         <li><div><h3>寄物櫃</h3><p>本館 2F 售票處旁有投幣式寄物櫃（退幣型），大包包先寄再看展。</p></div></li>
         <li><div><h3>展廳規定</h3><p>展廳內禁止飲食與閃光燈，部分展件不能拍照，請依現場標示。</p></div></li>
         <li><div><h3>防曬與好走的鞋</h3><p>園區約 70 公頃，戶外幾乎沒遮蔭。帶帽子、水壺，傍晚加防蚊液。</p></div></li>
@@ -518,6 +565,7 @@
   </ul>
 </nav>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="js/shops.js"></script>
 <script src="js/spots.js"></script>
 <script src="js/app.js"></script>
